@@ -1,13 +1,30 @@
 import heapq
+import numpy as np
+import random
 
 # Define the board and obstacles
-board = [[2 for _ in range(6)] for _ in range(6)]
-board[3][3] = 3  # Ghost position
-obstacles = [(3, 3)]
+board = np.full((5, 5), 1)
+
+ghost_pos = (random.randint(0, 4), random.randint(0, 4))
+board[ghost_pos] = 3
+obstacles = [ghost_pos]
+
+PACman_pos = (random.randint(0, 4), random.randint(0, 4))
+
+while PACman_pos == ghost_pos:
+    PACman_pos = (random.randint(0, 4), random.randint(0, 4))
+
+board[PACman_pos] = 2
+start_pos = [PACman_pos]
+start_point = start_pos[0]
+
+
+print("Ghost position is in: ", ghost_pos)
+print("PACman start at: ", start_point)
 
 
 def heuristic():
-    return sum(row.count(2) for row in board)
+    return np.count_nonzero(board == 1)
 
 
 def best_first_search(start):
@@ -20,10 +37,9 @@ def best_first_search(start):
             continue
         visited.add(pos)
         i, j = pos
-        if board[i][j] == 2:
-            board[i][j] = 0
-            if not any(2 in row for row in board):
-                print("Directions:", directions)
+        if board[i, j] == 1:
+            board[i, j] = 0
+            if not np.any(board == 1):
                 return
             if len(directions) > 0:
                 last_i, last_j = directions[-1]
@@ -41,8 +57,8 @@ def best_first_search(start):
                 print("Start")
             directions.append(pos)
         for ni, nj in [(i-1, j), (i+1, j), (i, j-1), (i, j+1)]:
-            if 0 <= ni < 5 and 0 <= nj < 5 and board[ni][nj] != 3 and (ni, nj) not in visited:
+            if 0 <= ni < 5 and 0 <= nj < 5 and board[ni, nj] != 3 and (ni, nj) not in visited:
                 heapq.heappush(heap, (heuristic(), (ni, nj)))
 
 
-best_first_search((0, 0))
+best_first_search(start_point)
