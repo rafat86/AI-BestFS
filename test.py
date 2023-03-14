@@ -1,3 +1,5 @@
+# Ra'fat Naserdeen
+
 import heapq
 import numpy as np
 import random
@@ -18,9 +20,9 @@ board[PACman_pos] = 2
 start_pos = [PACman_pos]
 start_point = start_pos[0]
 
-
-print("Ghost position is in: ", ghost_pos)
 print("PACman start at: ", start_point)
+print("Ghost position is in: ", ghost_pos)
+print("PACman has to move the following directions to reach the goal")
 
 
 def heuristic():
